@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SASD – Air Support Division | Formation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black:#07080A;--surface:#0E1114;--panel:#141820;--panel2:#181E28;
+      --border:#1E2530;--border2:#252E3C;--gold:#C8952A;--gold-dim:#8A6218;
+      --gold-glow:#E6B040;--white:#E8E4DC;--muted:#7A8290;--danger:#A83228;
+      --success:#2E7D4F;--nav-h:62px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--black);color:var(--white);font-family:'Inter',sans-serif;font-size:15px;line-height:1.65}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--surface)}::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:3px}
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(7,8,10,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:var(--nav-h);transition:box-shadow .3s}
+    nav.scrolled{box-shadow:0 2px 24px rgba(200,149,42,.08)}
+    .nav-brand{display:flex;align-items:center;gap:.9rem;text-decoration:none}
+    .nav-badge{width:36px;height:36px}
+    .nav-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.12em;color:var(--gold);text-transform:uppercase;line-height:1.2}
+    .nav-title span{display:block;font-size:.62rem;color:var(--muted);letter-spacing:.18em;font-weight:400}
+    .nav-links{display:flex;gap:0;list-style:none}
+    .nav-links a{display:block;padding:0 .9rem;height:var(--nav-h);line-height:var(--nav-h);font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+    .nav-links a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+    .nav-links a.active{color:var(--gold-glow);border-bottom-color:var(--gold-glow)}
+    .nav-right{display:flex;align-items:center;gap:1rem}
+    .nav-status{display:flex;align-items:center;gap:.5rem;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted)}
+    .status-dot{width:7px;height:7px;border-radius:50%;background:#3A8A3A;box-shadow:0 0 6px #3A8A3A;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .nav-btn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.4rem 1rem;border:1px solid;cursor:pointer;transition:all .2s;background:transparent}
+    .nav-btn-gold{border-color:var(--gold-dim);color:var(--gold)}.nav-btn-gold:hover{background:var(--gold);color:var(--black)}
+    .nav-btn-outline{border-color:var(--border2);color:var(--muted)}.nav-btn-outline:hover{border-color:var(--gold-dim);color:var(--gold)}
+    .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:100px 2rem 5rem;text-align:center}
+    .hero-heli{position:absolute;bottom:-40px;right:-60px;width:680px;opacity:.04;pointer-events:none}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,149,42,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,149,42,.04) 1px,transparent 1px);background-size:48px 48px;z-index:0;pointer-events:none}
+    .hero>*:not(.hero-grid){position:relative;z-index:1}
+    .hero-scanline{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px);pointer-events:none}
+    .hero-eyebrow{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:1.4rem;display:flex;align-items:center;gap:.8rem}
+    .hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;width:40px;height:1px;background:var(--gold-dim)}
+    .hero-shield{margin-bottom:1.8rem;animation:floatShield 4s ease-in-out infinite}
+    @keyframes floatShield{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .hero h1{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(2.8rem,7vw,5.5rem);line-height:.95;letter-spacing:.06em;text-transform:uppercase;color:var(--white);margin-bottom:.3rem}
+    .hero h1 em{font-style:normal;color:var(--gold)}
+    .hero-sub{font-family:'Rajdhani',sans-serif;font-weight:500;font-size:clamp(1rem,2vw,1.4rem);letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-bottom:2.5rem}
+    .hero-desc{max-width:560px;font-size:.92rem;color:var(--muted);line-height:1.8;margin-bottom:3rem}
+    .hero-stats{display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+    .stat{text-align:center}
+    .stat-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2.2rem;color:var(--gold);line-height:1}
+    .stat-label{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:.3rem}
+    .hero-cta{display:inline-flex;align-items:center;gap:.7rem;background:var(--gold);color:var(--black);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.85rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:.85rem 2.2rem;border:none;cursor:pointer;transition:background .2s,transform .15s;margin-right:1rem}
+    .hero-cta:hover{background:var(--gold-glow);transform:translateY(-2px)}
+    .hero-cta-outline{background:transparent;border:1px solid var(--gold-dim);color:var(--gold)}.hero-cta-outline:hover{background:rgba(200,149,42,.1)}
+    .scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;color:var(--border);animation:bounce 2.5s infinite}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+    section{padding:6rem 2rem}
+    .section-inner{max-width:1100px;margin:0 auto}
+    .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3.5rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:1rem}
+    .section-tag{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
+    .section-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(1.6rem,3.5vw,2.5rem);letter-spacing:.05em;text-transform:uppercase;color:var(--white);line-height:1.1}
+    .section-count{font-family:'Rajdhani',sans-serif;font-size:4rem;font-weight:700;color:var(--border);line-height:1}
+    .phases{background:var(--surface)}
+    .phases-grid{display:grid;gap:1px;background:var(--border)}
+    .phase-card{background:var(--panel);padding:2.2rem 2rem;position:relative;overflow:hidden;transition:background .2s;cursor:default}
+    .phase-card:hover{background:#16191F}
+    .phase-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold-dim);transition:background .2s}
+    .phase-card:hover::before{background:var(--gold)}
+    .phase-num{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--gold-dim);margin-bottom:.8rem}
+    .phase-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.4rem;letter-spacing:.08em;text-transform:uppercase;color:var(--white);margin-bottom:.8rem}
+    .phase-desc{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:1.4rem}
+    .phase-items{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+    .phase-items li{font-size:.83rem;color:var(--muted);display:flex;align-items:flex-start;gap:.65rem}
+    .phase-items li::before{content:'▸';color:var(--gold);flex-shrink:0;margin-top:1px}
+    .phase-badge{position:absolute;top:1.5rem;right:1.5rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--gold-dim);border:1px solid var(--gold-dim);padding:.2rem .55rem;text-transform:uppercase}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+    @media(max-width:700px){.two-col{grid-template-columns:1fr}}
+    .three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+    @media(max-width:800px){.three-col{grid-template-columns:1fr}}
+    .procedures{background:var(--black)}
+    .proc-block{background:var(--panel);padding:2rem}
+    .proc-icon{font-size:1.8rem;margin-bottom:1rem}
+    .proc-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.15rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:.7rem}
+    .proc-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .proc-list li{font-size:.84rem;color:var(--muted);padding-left:1rem;position:relative}
+    .proc-list li::before{content:'—';position:absolute;left:0;color:var(--gold-dim)}
+    .radio-section{background:var(--surface)}
+    .radio-table{width:100%;border-collapse:collapse;font-family:'Share Tech Mono',monospace}
+    .radio-table thead tr{border-bottom:1px solid var(--gold-dim)}
+    .radio-table th{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);padding:.8rem 1rem;text-align:left;font-weight:400}
+    .radio-table td{font-size:.82rem;color:var(--muted);padding:.75rem 1rem;border-bottom:1px solid var(--border);transition:background .15s}
+    .radio-table tr:hover td{background:var(--panel);color:var(--white)}
+    .radio-table td:first-child{color:var(--white)}.radio-table .freq{color:var(--gold-dim)}
+    .evals{background:var(--black)}
+    .eval-card{background:var(--panel);padding:2rem}
+    .eval-step{display:flex;gap:1.2rem;margin-bottom:1.6rem;padding-bottom:1.6rem;border-bottom:1px solid var(--border)}
+    .eval-step:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+    .eval-n{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2rem;color:var(--border);line-height:1;min-width:2rem;transition:color .2s}
+    .eval-step:hover .eval-n{color:var(--gold)}
+    .eval-text h4{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--white);margin-bottom:.35rem}
+    .eval-text p{font-size:.84rem;color:var(--muted);line-height:1.7}
+    .rules{background:var(--surface)}
+    .rule-item{background:var(--panel);padding:1.6rem 2rem;display:flex;gap:1.5rem;align-items:flex-start;border-left:3px solid var(--border);transition:border-color .2s,background .2s}
+    .rule-item:hover{border-left-color:var(--gold);background:#16191F}
+    .rule-item.danger{border-left-color:var(--danger)}
+    .rule-icon{font-size:1.4rem;flex-shrink:0;margin-top:.1rem}
+    .rule-content h4{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:1rem;letter-spacing:.08em;text-transform:uppercase;color:var(--white);margin-bottom:.35rem}
+    .rule-content p{font-size:.84rem;color:var(--muted)}
+    footer{background:var(--surface);border-top:1px solid var(--border);padding:3rem 2rem}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem}
+    .footer-brand{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.9rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+    .footer-brand span{display:block;font-size:.65rem;color:var(--muted);font-weight:400;letter-spacing:.2em;margin-top:.2rem}
+    .footer-meta{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--border);text-align:right;line-height:2}
+    .gold-divider{width:60px;height:2px;background:var(--gold);margin:1rem 0 1.5rem}
+    .checklist{display:flex;flex-direction:column;gap:.5rem}
+    .check-item{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:var(--muted)}
+    .check-box{width:16px;height:16px;border:1px solid var(--gold-dim);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .check-box.done{background:var(--gold-dim)}.check-box.done::after{content:'✓';font-size:10px;color:var(--black)}
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(7,8,10,.92);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--panel);border:1px solid var(--border2);width:min(96vw,560px);max-height:90vh;overflow-y:auto;animation:slideUp .25s ease}
+    .modal-wide{width:min(96vw,980px)}
+    @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.8rem;border-bottom:1px solid var(--border)}
+    .modal-head h3{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.2rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
+    .modal-close{background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:pointer;transition:color .2s;line-height:1}
+    .modal-close:hover{color:var(--gold)}
+    .modal-body{padding:1.8rem}
+    /* FORMS */
+    .form-group{margin-bottom:1.2rem}
+    .form-group label{display:block;font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
+    .form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--white);font-family:'Inter',sans-serif;font-size:.88rem;padding:.7rem 1rem;outline:none;transition:border-color .2s;resize:vertical}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold-dim)}
+    .form-group select option{background:var(--panel)}
+    .btn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;padding:.7rem 1.6rem;border:1px solid;cursor:pointer;transition:all .2s}
+    .btn-gold{background:var(--gold);border-color:var(--gold);color:var(--black)}.btn-gold:hover{background:var(--gold-glow)}
+    .btn-outline{background:transparent;border-color:var(--border2);color:var(--muted)}.btn-outline:hover{border-color:var(--gold-dim);color:var(--gold)}
+    .btn-danger{background:transparent;border-color:var(--danger);color:#D4887F}.btn-danger:hover{background:rgba(168,50,40,.2)}
+    /* TOAST */
+    #toast{position:fixed;bottom:2rem;right:2rem;z-index:9999;display:flex;flex-direction:column;gap:.5rem}
+    .toast-msg{background:var(--panel);border:1px solid var(--border2);border-left:3px solid var(--gold);padding:.8rem 1.2rem;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--white);animation:toastIn .3s ease;min-width:240px}
+    .toast-msg.err{border-left-color:var(--danger)}.toast-msg.ok{border-left-color:var(--success)}
+    @keyframes toastIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+    /* TABS */
+    .tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:1.5rem;flex-wrap:wrap;overflow-x:auto}
+    .tab{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;padding:.7rem 1.1rem;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap}
+    .tab:hover{color:var(--white)}.tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+    .tab-content{display:none}.tab-content.active{display:block}
+    /* QUIZ */
+    .quiz-section{background:var(--surface);padding:6rem 2rem}
+    .quiz-cta-wrap{text-align:center;padding:3rem 2rem;background:var(--panel);border:1px solid var(--border2);margin-top:2rem}
+    .quiz-cta-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--white);margin-bottom:.5rem}
+    .quiz-cta-sub{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem}
+    .qcm-question{margin-bottom:2rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border)}
+    .qcm-q-num{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.18em;color:var(--gold);margin-bottom:.5rem}
+    .qcm-q-text{font-weight:600;color:var(--white);margin-bottom:1rem;font-size:.95rem}
+    .qcm-options{display:flex;flex-direction:column;gap:.5rem}
+    .qcm-option{display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;background:var(--panel);border:1px solid var(--border);cursor:pointer;transition:all .2s;font-size:.88rem;color:var(--muted)}
+    .qcm-option:hover{border-color:var(--gold-dim);color:var(--white)}
+    .qcm-option.selected{border-color:var(--gold-dim);color:var(--white);background:rgba(200,149,42,.07)}
+    .qcm-option.correct{border-color:var(--success);background:rgba(46,125,79,.15);color:#7FDBA2}
+    .qcm-option.wrong{border-color:var(--danger);background:rgba(168,50,40,.15);color:#D4887F}
+    .quiz-progress{display:flex;align-items:center;gap:1rem;margin-bottom:2rem}
+    .quiz-progress-bar{flex:1;height:4px;background:var(--border)}
+    .quiz-progress-fill{height:4px;background:var(--gold);transition:width .3s}
+    .quiz-score{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:3rem;color:var(--gold);text-align:center}
+    .quiz-score-label{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.2em;color:var(--muted);text-align:center;margin-top:.3rem}
+    /* ADMIN */
+    .admin-table{width:100%;border-collapse:collapse;font-size:.85rem}
+    .admin-table th{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.15em;color:var(--gold);padding:.6rem .8rem;text-align:left;border-bottom:1px solid var(--gold-dim);font-weight:400}
+    .admin-table td{padding:.6rem .8rem;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:middle}
+    .admin-table tr:hover td{background:var(--surface)}.admin-table td:first-child{color:var(--white);font-weight:500}
+    .badge{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.1em;padding:.15rem .5rem;border:1px solid}
+    .badge-gold{border-color:var(--gold-dim);color:var(--gold)}.badge-green{border-color:#2E7D4F;color:#7FDBA2}
+    .badge-red{border-color:var(--danger);color:#D4887F}.badge-blue{border-color:#1A5580;color:#5EB4E8}
+    .grade-DPTR,.grade-DPRT{background:rgba(138,98,24,.2);color:var(--gold);border:1px solid var(--gold-dim)}
+    .grade-SRGCHEF{background:rgba(46,125,79,.2);color:#7FDBA2;border:1px solid #2E7D4F}
+    .grade-DPT2{background:rgba(26,85,128,.2);color:#5EB4E8;border:1px solid #1A5580}
+    .grade-DPT3{background:rgba(100,40,140,.2);color:#C08AF0;border:1px solid #6428A8}
+    .grade-LEAD,.grade-COLEAD,.grade-COLEAD{background:rgba(200,149,42,.15);color:var(--gold-glow);border:1px solid var(--gold)}
+    .grade-APPRENTI{background:rgba(122,130,144,.1);color:var(--muted);border:1px solid var(--border2)}
+    .search-input{background:var(--surface);border:1px solid var(--border2);color:var(--white);font-family:'Share Tech Mono',monospace;font-size:.78rem;padding:.5rem 1rem;outline:none;width:100%;max-width:300px}
+    .search-input:focus{border-color:var(--gold-dim)}
+    /* PERSO */
+    .perso-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:2rem;letter-spacing:.08em;color:var(--white);text-transform:uppercase}
+    .perso-grade-badge{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;padding:.3rem .8rem;border:1px solid var(--gold-dim);color:var(--gold);text-transform:uppercase;margin-top:.4rem}
+    .perso-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-bottom:1px}
+    @media(max-width:700px){.perso-grid{grid-template-columns:1fr}}
+    .perso-card{background:var(--panel);padding:1.8rem}
+    .perso-card-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+    .sortie-row{display:flex;align-items:center;gap:1rem;padding:.7rem;background:var(--surface);border:1px solid var(--border);margin-bottom:.5rem;font-family:'Share Tech Mono',monospace;font-size:.75rem}
+    .sortie-check{width:18px;height:18px;cursor:pointer;accent-color:var(--gold)}
+    .sortie-time{color:var(--gold-dim);min-width:160px}.sortie-note{color:var(--muted);flex:1}
+    .journal-entry{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold-dim);padding:1rem;margin-bottom:.7rem}
+    .journal-meta{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--gold-dim);margin-bottom:.4rem}
+    .journal-text{font-size:.84rem;color:var(--muted);line-height:1.7}
+    .report-entry{background:var(--surface);border:1px solid var(--border);border-left:3px solid #1A5580;padding:1rem;margin-bottom:.7rem}
+    .report-meta{font-family:'Share Tech Mono',monospace;font-size:.65rem;color:#5EB4E8;margin-bottom:.4rem}
+    .journal-btn{background:none;border:none;font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--muted);cursor:pointer;padding:0;transition:color .2s;margin-top:.5rem}
+    .journal-btn:hover{color:var(--gold)}.journal-btn.del:hover{color:var(--danger)}
+    /* QCM EDITOR */
+    .qcm-editor-item{background:var(--surface);border:1px solid var(--border);padding:1.2rem;margin-bottom:1rem}
+    .option-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+    .option-row input[type=text]{flex:1;background:var(--panel);border:1px solid var(--border);color:var(--white);padding:.4rem .7rem;font-size:.84rem;outline:none}
+    .option-row input[type=text]:focus{border-color:var(--gold-dim)}
+    .option-correct-btn{font-family:'Share Tech Mono',monospace;font-size:.62rem;padding:.3rem .6rem;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+    .option-correct-btn.is-correct{border-color:var(--success);color:#7FDBA2;background:rgba(46,125,79,.15)}
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+    .reveal.visible{opacity:1;transform:none}
+    @media(max-width:768px){.nav-links{display:none}.nav-btn{display:none}}
+  </style>
+</head>
+<body>
+<div id="toast"></div>
+<nav id="main-nav">
+  <a href="#" class="nav-brand">
+    <svg class="nav-badge" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="40,4 74,20 74,60 40,76 6,60 6,20" fill="#0E1114" stroke="#C8952A" stroke-width="2.5"/>
+      <polygon points="40,12 66,25 66,55 40,68 14,55 14,25" fill="none" stroke="#8A6218" stroke-width="1"/>
+      <text x="40" y="36" text-anchor="middle" font-family="Rajdhani,sans-serif" font-weight="700" font-size="11" fill="#C8952A" letter-spacing="1">SASD</text>
+      <text x="40" y="50" text-anchor="middle" font-family="Rajdhani,sans-serif" font-weight="600" font-size="7.5" fill="#7A8290" letter-spacing="1.5">AIR DIV</text>
+    </svg>
+    <div class="nav-title">SASD – ASD<span>Air Support Division</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="event.preventDefault();document.getElementById('programme').scrollIntoView({behavior:'smooth'})">Programme</a></li>
+    <li><a href="#" onclick="event.preventDefault();document.getElementById('procedures').scrollIntoView({behavior:'smooth'})">Procédures</a></li>
+    <li><a href="#" onclick="event.preventDefault();document.getElementById('radio').scrollIntoView({behavior:'smooth'})">Radio</a></li>
+    <li><a href="#" onclick="event.preventDefault();document.getElementById('evaluation').scrollIntoView({behavior:'smooth'})">Évaluation</a></li>
+    <li><a href="#" onclick="event.preventDefault();document.getElementById('reglement').scrollIntoView({behavior:'smooth'})">Règlement</a></li>
+    <li><a href="#" onclick="event.preventDefault();document.getElementById('questionnaire').scrollIntoView({behavior:'smooth'})">Questionnaire</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-status"><div class="status-dot"></div>SYSTEME ACTIF</div>
+    <button class="nav-btn nav-btn-outline" onclick="openPersoModal()">Mon Espace</button>
+    <button class="nav-btn nav-btn-gold" onclick="openAdminModal()">⚙ Admin</button>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-scanline"></div>
+  <svg class="hero-heli" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" fill="white">
+    <ellipse cx="260" cy="170" rx="180" ry="45"/><ellipse cx="150" cy="162" rx="55" ry="40" fill="white"/>
+    <polygon points="440,165 580,135 580,145 440,180"/><line x1="575" y1="100" x2="575" y2="175" stroke="white" stroke-width="6"/>
+    <ellipse cx="575" cy="110" rx="4" ry="28" fill="white"/><line x1="70" y1="120" x2="460" y2="120" stroke="white" stroke-width="7"/>
+    <line x1="120" y1="80" x2="410" y2="160" stroke="white" stroke-width="5"/><circle cx="270" cy="120" r="12" fill="white"/>
+    <line x1="130" y1="212" x2="380" y2="212" stroke="white" stroke-width="8"/><line x1="150" y1="212" x2="170" y2="195" stroke="white" stroke-width="5"/>
+    <line x1="360" y1="212" x2="340" y2="195" stroke="white" stroke-width="5"/><circle cx="100" cy="185" r="14" fill="white"/>
+  </svg>
+  <div class="hero-eyebrow">DOCUMENT OFFICIEL · CONFIDENTIEL INTERNE</div>
+  <div class="hero-shield">
+    <svg width="90" height="100" viewBox="0 0 90 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="45,3 86,20 86,65 45,97 4,65 4,20" fill="#0E1114" stroke="#C8952A" stroke-width="2.5"/>
+      <polygon points="45,11 78,26 78,62 45,89 12,62 12,26" fill="none" stroke="#8A6218" stroke-width="1"/>
+      <text x="45" y="47" text-anchor="middle" font-family="Rajdhani,sans-serif" font-weight="700" font-size="13" fill="#C8952A" letter-spacing="1">SASD</text>
+      <text x="45" y="62" text-anchor="middle" font-family="Rajdhani,sans-serif" font-weight="600" font-size="8" fill="#7A8290" letter-spacing="2">AIR UNIT</text>
+      <text x="45" y="28" text-anchor="middle" font-size="14">✦</text>
+    </svg>
+  </div>
+  <h1>Air Support<br/><em>Division</em></h1>
+  <div class="hero-sub">Formation Officielle — Pilote ASD</div>
+  <p class="hero-desc">Ce document constitue le manuel de formation officiel de l'unité aérienne du San Andreas Sheriff Department. Son contenu est réservé aux candidats admis à la procédure de sélection ASD.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Phases de formation</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Évaluations</div></div>
+    <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Couverture aérienne</div></div>
+  </div>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;">
+    <button class="hero-cta" onclick="document.getElementById('programme').scrollIntoView({behavior:'smooth'})">▶ Accéder à la formation</button>
+    <button class="hero-cta hero-cta-outline" onclick="document.getElementById('questionnaire').scrollIntoView({behavior:'smooth'})">📋 Questionnaire</button>
+  </div>
+  <div class="scroll-hint">↓ DÉFILER</div>
+</section>
+
+<section id="programme" class="phases">
+  <div class="section-inner">
+    <div class="section-header reveal">
+      <div><div class="section-tag">MODULE 01 · Programme</div><h2 class="section-title">Phases de Formation</h2></div>
+      <div class="section-count">06</div>
+    </div>
+    <div class="phases-grid reveal">
+      <div class="phase-card"><div class="phase-num">PHASE · 01</div><div class="phase-badge">Théorique</div><div class="phase-title">Briefing & Intégration</div><p class="phase-desc">Présentation de l'unité ASD, de son rôle au sein du SASD, de la hiérarchie interne et des attentes du commandement.</p><ul class="phase-items"><li>Présentation de l'organigramme SASD / ASD</li><li>Règlement intérieur et code de conduite</li><li>Matériel réglementaire et équipements</li><li>Procédures de contact avec la chaîne de commandement</li></ul></div>
+      <div class="phase-card"><div class="phase-num">PHASE · 02</div><div class="phase-badge">Pratique</div><div class="phase-title">Prise en Main de l'Appareil</div><p class="phase-desc">Familiarisation avec les hélicoptères de dotation du SASD.</p><ul class="phase-items"><li>Identification des appareils en service (Maverick, Police Maverick)</li><li>Procédure de démarrage et de pré-vol</li><li>Commandes de pilotage de base (pas collectif / cyclique)</li><li>Procédures d'urgence et d'extinction</li></ul></div>
+      <div class="phase-card"><div class="phase-num">PHASE · 03</div><div class="phase-badge">Pratique</div><div class="phase-title">Navigation & Cartographie</div><p class="phase-desc">Apprentissage de la navigation aérienne sur le territoire du comté.</p><ul class="phase-items"><li>Points de repère clés du comté (Blaine, Paleto, Sandy Shores)</li><li>Itinéraires de patrouille aérienne standardisés</li></ul></div>
+      <div class="phase-card"><div class="phase-num">PHASE · 04</div><div class="phase-badge">Tactique</div><div class="phase-title">Soutien aux Opérations Terrestres</div><p class="phase-desc">Techniques de surveillance, guidage de patrouilles au sol et participation aux dispositifs d'interpellation depuis les airs.</p><ul class="phase-items"><li>Techniques d'observation et de surveillance de suspects</li><li>Guidage radio des unités terrestres en poursuite</li><li>Utilisation de la caméra en opération</li><li>Encerclement aérien et couverture de périmètre</li></ul></div>
+      <div class="phase-card"><div class="phase-num">PHASE · 05</div><div class="phase-badge">Communications</div><div class="phase-title">Protocoles Radio & Phraséologie</div><p class="phase-desc">Maîtrise des communications radio standardisées, de l'alphabet phonétique NATO et des codes en usage au SASD.</p><ul class="phase-items"><li>Alphabet phonétique NATO complet</li><li>Codes radio SASD (10-codes, MAYDAY)</li><li>Gestion des fréquences en opération</li></ul></div>
+      <div class="phase-card"><div class="phase-num">PHASE · 06</div><div class="phase-badge">Certification</div><div class="phase-title">Évaluation Finale & Certification</div><p class="phase-desc">Examen pratique et oral devant le jury de certification ASD.</p><ul class="phase-items"><li>Épreuve de vol libre notée par le formateur</li><li>Scénario tactique simulé (poursuite + guidage sol)</li><li>Examen oral sur les procédures et règlements</li><li>Intégration officielle à l'unité ASD</li></ul></div>
+    </div>
+  </div>
+</section>
+<section id="procedures" class="procedures">
+  <div class="section-inner">
+    <div class="section-header reveal"><div><div class="section-tag">MODULE 02 · Procédures</div><h2 class="section-title">Procédures Opérationnelles</h2></div><div class="section-count">07</div></div>
+    <div class="three-col reveal" style="margin-bottom:1px;">
+      <div class="proc-block"><div class="proc-icon">🚁</div><div class="proc-title">Pré-Vol</div><ul class="proc-list"><li>Vérifier l'autorisation de vol du Lead et Co-lead ASD</li><li>Contrôle visuel complet de l'appareil</li><li>Test des systèmes de communication</li></ul></div>
+      <div class="proc-block"><div class="proc-icon">📡</div><div class="proc-title">Mise en Station</div><ul class="proc-list"><li>Annonce sur Fréquence au décollage</li><li>Confirmation de l'appareil utilisé</li><li>Signalement de la zone de patrouille</li><li>Établissement du contact avec dispatch</li></ul></div>
+      <div class="proc-block"><div class="proc-icon">🎯</div><div class="proc-title">Engagement Opérationnel</div><ul class="proc-list"><li>Annoncer l'engagement sur Fréquence</li><li>Maintenir une altitude sécurisée</li><li>Rester en contact radio permanent</li></ul></div>
+    </div>
+    <div class="reveal" style="margin-top:1px;"><div class="proc-block"><div class="proc-icon">🛬</div><div class="proc-title">Post-Vol & Fin de Service</div><ul class="proc-list"><li>Annonce de fin de service sur Fréquence</li><li>Poser l'appareil sur le pad désigné (Sandy Shores)</li><li>Compléter le rapport de vol dans le tableau de bord</li><li>Signaler tout incident ou dommage constaté au Lead ou Co-Lead</li><li>Faire le plein de carburant dans l'appareil</li></ul></div></div>
+  </div>
+</section>
+<section id="radio" class="radio-section">
+  <div class="section-inner">
+    <div class="section-header reveal"><div><div class="section-tag">MODULE 03 · Communications</div><h2 class="section-title">Protocoles Radio</h2></div><div class="section-count">RDO</div></div>
+    <div class="two-col reveal" style="margin-bottom:3rem;">
+      <div class="proc-block">
+        <div class="proc-title">Alphabet Phonétique NATO</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem 2rem;margin-top:.8rem;">
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">A — Alpha</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">N — November</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">B — Bravo</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">O — Oscar</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">C — Charlie</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">P — Papa</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">D — Delta</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">R — Romeo</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">E — Echo</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">S — Sierra</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">F — Foxtrot</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">T — Tango</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">G — Golf</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">U — Uniform</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">H — Hotel</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">V — Victor</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">I — India</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">W — Whiskey</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">K — Kilo</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">X — X-Ray</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">L — Lima</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">Y — Yankee</span>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">M — Mike</span><span style="font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--muted)">Z — Zulu</span>
+        </div>
+      </div>
+      <div class="proc-block">
+        <div class="proc-title">Expressions Radio Standardisées</div>
+        <ul class="proc-list" style="margin-top:.8rem;">
+          <li><strong style="color:var(--white)">ASD-1</strong> — Identifiant de l'hélicoptère primaire</li>
+          <li><strong style="color:var(--white)">ASD-2</strong> — Identifiant de l'hélicoptère secondaire</li>
+          <li><strong style="color:var(--white)">10-04</strong> — Message bien reçu / Oui</li>
+          <li><strong style="color:var(--white)">10-05</strong> — Non / Impossible</li>
+          <li><strong style="color:var(--white)">EN ROUTE</strong> — Déplacement en cours vers cible</li>
+          <li><strong style="color:var(--white)">VISUEL</strong> — Cible identifiée depuis les airs</li>
+          <li><strong style="color:var(--white)">PERDU LE VISUEL</strong> — Contact visuel rompu</li>
+          <li><strong style="color:var(--white)">MAYDAY / PAN-PAN</strong> — Détresse / Urgence</li>
+          <li><strong style="color:var(--white)">CODE 6</strong> — Stationnaire sur zone, annoncer</li>
+          <li><strong style="color:var(--white)">10-35</strong> — Demande renforts immédiats</li>
+        </ul>
+      </div>
+    </div>
+    <table class="radio-table reveal">
+      <thead><tr><th>Canal</th><th>Désignation</th><th>Fréquence</th><th>Usage</th></tr></thead>
+      <tbody>
+        <tr><td>CH-1</td><td>SASD Principal</td><td class="freq">7 MHz</td><td>Communications globales SASD</td></tr>
+        <tr><td>CH-2</td><td>ASD Interne</td><td class="freq">8 MHz</td><td>Canal exclusif en cas de prise d'otage d'agent</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="evaluation" class="evals">
+  <div class="section-inner">
+    <div class="section-header reveal"><div><div class="section-tag">MODULE 04 · Évaluation</div><h2 class="section-title">Processus de Certification</h2></div><div class="section-count">03</div></div>
+    <div class="two-col reveal">
+      <div class="eval-card">
+        <div class="eval-step"><div class="eval-n">01</div><div class="eval-text"><h4>Évaluation Intermédiaire — Vol de Base</h4><p>Circuit de navigation prédéfini. Durée : 15 minutes. Note minimale : 14/20.</p></div></div>
+        <div class="eval-step"><div class="eval-n">02</div><div class="eval-text"><h4>Évaluation Tactique — Scénario Opérationnel</h4><p>Scénario simulé (poursuite de véhicule volé) avec guidage des unités sol. Durée : 20 min. Note minimale : 15/20.</p></div></div>
+        <div class="eval-step"><div class="eval-n">03</div><div class="eval-text"><h4>Évaluation Finale — Oral & Vol Libre</h4><p>Entretien de 10 min + vol libre de 5 min. Note minimale : 16/20 aux deux épreuves.</p></div></div>
+      </div>
+      <div class="eval-card">
+        <div class="proc-title" style="margin-bottom:1.5rem;">Grille de Notation</div>
+        <div style="display:flex;flex-direction:column;gap:.9rem;">
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:.4rem;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted)"><span>Maîtrise du vol</span><span style="color:var(--gold)">/ 6 pts</span></div><div style="background:var(--border);height:4px"><div style="background:var(--gold);height:4px;width:100%"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:.4rem;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted)"><span>Communication radio</span><span style="color:var(--gold)">/ 5 pts</span></div><div style="background:var(--border);height:4px"><div style="background:var(--gold);height:4px;width:83%"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:.4rem;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted)"><span>Procédures respectées</span><span style="color:var(--gold)">/ 5 pts</span></div><div style="background:var(--border);height:4px"><div style="background:var(--gold);height:4px;width:83%"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;margin-bottom:.4rem;font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted)"><span>Sang-froid & décision</span><span style="color:var(--gold)">/ 4 pts</span></div><div style="background:var(--border);height:4px"><div style="background:var(--gold);height:4px;width:66%"></div></div></div>
+        </div>
+        <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+          <div class="proc-title" style="margin-bottom:1rem">Checklist Pré-Évaluation</div>
+          <div class="checklist">
+            <div class="check-item"><div class="check-box done"></div>Phases 1 à 5 validées par le formateur</div>
+            <div class="check-item"><div class="check-box done"></div>Équipement réglementaire porté</div>
+            <div class="check-item"><div class="check-box"></div>Rapport de progression remis au jury</div>
+            <div class="check-item"><div class="check-box"></div>Présence 15 min avant l'évaluation</div>
+            <div class="check-item"><div class="check-box"></div>Carte de mission mémorisée</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="reglement" class="rules">
+  <div class="section-inner">
+    <div class="section-header reveal"><div><div class="section-tag">MODULE 05 · Règlement</div><h2 class="section-title">Code de Conduite ASD</h2></div><div class="section-count">⚖</div></div>
+    <div style="display:flex;flex-direction:column;gap:1px" class="reveal">
+      <div class="rule-item"><div class="rule-icon">🪪</div><div class="rule-content"><h4>Respect de la Hiérarchie</h4><p>Tout pilote ASD est soumis à l'autorité du superviseur en poste. Aucun vol ne peut être initié sans autorisation de la chaîne de commandement.</p></div></div>
+      <div class="rule-item danger"><div class="rule-icon">🚫</div><div class="rule-content"><h4>Interdiction Formelle d'Usage Impropre</h4><p>L'hélicoptère de service est un outil opérationnel. Tout usage à des fins personnelles entraîne une sanction immédiate pouvant aller jusqu'à l'exclusion définitive.</p></div></div>
+      <div class="rule-item"><div class="rule-icon">📋</div><div class="rule-content"><h4>Obligation de Rapport</h4><p>Chaque engagement aérien doit faire l'objet d'un rapport écrit déposé dans les 48 heures suivant l'opération.</p></div></div>
+      <div class="rule-item"><div class="rule-icon">🤝</div><div class="rule-content"><h4>Coopération Inter-Unités</h4><p>L'unité ASD opère en soutien, jamais en autonomie complète. Communication active avec les unités sol obligatoire.</p></div></div>
+      <div class="rule-item danger"><div class="rule-icon">⚔️</div><div class="rule-content"><h4>Usage de la Force Aérienne</h4><p>L'ouverture du feu depuis un aéronef est INTERDITE. Tout manquement constitue une faute grave.</p></div></div>
+      <div class="rule-item"><div class="rule-icon">🎓</div><div class="rule-content"><h4>Formation Continue</h4><p>Les pilotes certifiés sont tenus de participer aux sessions de recyclage mensuelles organisées par l'unité.</p></div></div>
+      <div class="rule-item"><div class="rule-icon">🔒</div><div class="rule-content"><h4>Confidentialité Opérationnelle</h4><p>Les procédures internes, fréquences radio et protocoles tactiques de l'ASD sont strictement confidentiels.</p></div></div>
+    </div>
+  </div>
+</section>
+<section id="questionnaire" class="quiz-section">
+  <div class="section-inner">
+    <div class="section-header reveal"><div><div class="section-tag">MODULE 06 · Évaluation Théorique</div><h2 class="section-title">Questionnaire de Formation</h2></div><div class="section-count">QCM</div></div>
+    <div class="quiz-cta-wrap reveal" id="quiz-landing">
+      <div class="quiz-cta-title">Test de Connaissances ASD</div>
+      <div class="quiz-cta-sub">Répondez aux questions suivantes pour évaluer votre préparation. Les résultats seront transmis au Lead ASD.</div>
+      <button class="btn btn-gold" onclick="startQuiz()">▶ Démarrer le questionnaire</button>
+    </div>
+    <div id="quiz-container" style="display:none"></div>
+  </div>
+</section>
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">San Andreas Sheriff Department<span>Air Support Division — Formation Officielle</span></div>
+      <div style="margin-top:1.2rem;display:flex;gap:.7rem;align-items:center">
+        <svg width="60" height="66" viewBox="0 0 80 80" fill="none" style="opacity:.35"><polygon points="40,4 74,20 74,60 40,76 6,60 6,20" fill="#0E1114" stroke="#C8952A" stroke-width="2"/><text x="40" y="42" text-anchor="middle" font-family="Rajdhani,sans-serif" font-weight="700" font-size="10" fill="#C8952A">SASD</text><text x="40" y="54" text-anchor="middle" font-family="Rajdhani,sans-serif" font-size="6.5" fill="#7A8290">ASD</text></svg>
+        <p style="font-size:.75rem;color:var(--muted);max-width:340px;line-height:1.7">Ce document est la propriété du San Andreas Sheriff Department. Reproduction et diffusion interdites sans autorisation du commandement.</p>
+      </div>
+    </div>
+    <div class="footer-meta"><div>DOCUMENT REF. ASD-TRN-2024-001</div><div>VERSION 4.0 — EN VIGUEUR</div><div>COMTÉ DE SAN ANDREAS · GTA RP</div><div style="margin-top:.5rem;color:var(--gold-dim)">SASD © AIR SUPPORT DIVISION</div></div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-admin-auth">
+  <div class="modal"><div class="modal-head"><h3>⚙ Espace Administrateur</h3><button class="modal-close" onclick="closeModal('modal-admin-auth')">✕</button></div>
+  <div class="modal-body"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Accès réservé au Lead ASD. Entrez le code d'accès.</p>
+  <div class="form-group"><label>Code d'accès Admin</label><input type="password" id="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')verifyAdmin()"/></div>
+  <button class="btn btn-gold" onclick="verifyAdmin()" style="width:100%">Connexion</button>
+</div>
+<div class="modal-overlay" id="modal-admin">
+  <div class="modal modal-wide"><div class="modal-head"><h3>⚙ Panel Administrateur — ASD</h3><button class="modal-close" onclick="closeModal('modal-admin')">✕</button></div>
+  <div class="modal-body">
+    <div class="tabs">
+      <button class="tab active" onclick="adminTab('tab-agents')">👥 Agents</button>
+      <button class="tab" onclick="adminTab('tab-sorties')">🚁 Sorties</button>
+      <button class="tab" onclick="adminTab('tab-qcm-results')">📋 Résultats QCM</button>
+      <button class="tab" onclick="adminTab('tab-qcm-editor')">✏️ Éditeur QCM</button>
+      <button class="tab" onclick="adminTab('tab-settings')">🔧 Paramètres</button>
+    </div>
+    <div class="tab-content active" id="tab-agents">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.7rem">
+        <input class="search-input" id="agent-search" placeholder="Rechercher..." oninput="renderAgentsTable()"/>
+        <button class="btn btn-gold" onclick="openCreateAgentModal()">+ Créer un agent</button>
+      </div>
+      <div id="agents-table-wrap"></div>
+    </div>
+    <div class="tab-content" id="tab-sorties"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Traçabilité de toutes les sorties des agents.</p><div id="sorties-table-wrap"></div></div>
+    <div class="tab-content" id="tab-qcm-results"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Résultats des questionnaires soumis par les candidats.</p><div id="qcm-results-wrap"></div></div>
+    <div class="tab-content" id="tab-qcm-editor"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Modifiez les questions et réponses du QCM. Cliquez "Correct" pour désigner la bonne réponse.</p><div id="qcm-editor-wrap"></div><div style="margin-top:1rem;display:flex;gap:.7rem"><button class="btn btn-gold" onclick="saveQcm()">💾 Sauvegarder</button><button class="btn btn-outline" onclick="addQcmQuestion()">+ Ajouter une question</button></div></div>
+    <div class="tab-content" id="tab-settings">
+      <div class="form-group"><label>Nouveau code admin</label><input type="password" id="new-pwd" placeholder="Nouveau code..."/></div>
+      <div class="form-group"><label>Confirmer</label><input type="password" id="new-pwd2" placeholder="Confirmer..."/></div>
+      <button class="btn btn-gold" onclick="changePwd()" style="margin-bottom:2rem">Mettre à jour</button>
+      <div style="border-top:1px solid var(--border);padding-top:1.5rem"><p style="color:var(--muted);font-size:.84rem;margin-bottom:1rem">Zone danger — irréversible.</p><button class="btn btn-danger" onclick="clearAllData()">🗑 Réinitialiser toutes les données</button></div>
+    </div>
+  </div></div>
+</div>
+<div class="modal-overlay" id="modal-create-agent">
+  <div class="modal"><div class="modal-head"><h3>Créer un espace agent</h3><button class="modal-close" onclick="closeModal('modal-create-agent')">✕</button></div>
+  <div class="modal-body">
+    <div class="form-group"><label>Nom Prénom</label><input type="text" id="new-nom" placeholder="ex: SONY DUPONT"/></div>
+    <div class="form-group"><label>Grade</label><select id="new-grade"><option>APPRENTI</option><option>DPT R</option><option>DPT2</option><option>DPT3</option><option>SRG CHEF</option><option>CO-LEAD</option><option>LEAD</option></select></div>
+    <div class="form-group"><label>Code d'accès agent</label><input type="password" id="new-agent-pwd" placeholder="Code personnel..."/></div>
+    <button class="btn btn-gold" onclick="createAgent()" style="width:100%">Créer l'agent</button>
+  </div></div>
+</div>
+<div class="modal-overlay" id="modal-edit-agent">
+  <div class="modal"><div class="modal-head"><h3>✏️ Modifier l'agent</h3><button class="modal-close" onclick="closeModal('modal-edit-agent')">✕</button></div>
+  <div class="modal-body">
+    <input type="hidden" id="edit-agent-nom-orig"/>
+    <div class="form-group"><label>Nom Prénom</label><input type="text" id="edit-agent-nom"/></div>
+    <div class="form-group"><label>Grade</label><select id="edit-agent-grade"><option>APPRENTI</option><option>DPT R</option><option>DPT2</option><option>DPT3</option><option>SRG CHEF</option><option>CO-LEAD</option><option>LEAD</option></select></div>
+    <div class="form-group"><label>Nouveau code (laisser vide = inchangé)</label><input type="password" id="edit-agent-pwd"/></div>
+    <button class="btn btn-gold" onclick="saveEditAgent()" style="width:100%">Sauvegarder</button>
+  </div></div>
+</div>
+<div class="modal-overlay" id="modal-perso-auth">
+  <div class="modal"><div class="modal-head"><h3>🧑‍✈️ Mon Espace Personnel</h3><button class="modal-close" onclick="closeModal('modal-perso-auth')">✕</button></div>
+  <div class="modal-body"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Connectez-vous avec votre identifiant agent.</p>
+    <div class="form-group"><label>Votre Nom</label><input type="text" id="perso-nom" placeholder="ex: SONY"/></div>
+    <div class="form-group"><label>Code d'accès</label><input type="password" id="perso-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')loginPerso()"/></div>
+    <button class="btn btn-gold" onclick="loginPerso()" style="width:100%;margin-bottom:.7rem">Connexion</button>
+    <p style="color:var(--muted);font-size:.72rem;font-family:'Share Tech Mono',monospace">Votre espace doit être créé par un administrateur.</p>
+  </div></div>
+</div>
+<div class="modal-overlay" id="modal-perso">
+  <div class="modal modal-wide"><div class="modal-head"><h3 id="perso-modal-title">Mon Espace — AGENT</h3><button class="modal-close" onclick="logoutPerso()">✕ Déconnexion</button></div>
+  <div class="modal-body">
+    <div class="tabs">
+      <button class="tab active" onclick="persoTab('tab-p-profil')">🆔 Profil</button>
+      <button class="tab" onclick="persoTab('tab-p-journal')">📓 Journal</button>
+      <button class="tab" onclick="persoTab('tab-p-rapports')">📄 Rapports</button>
+      <button class="tab" onclick="persoTab('tab-p-sorties')">🚁 Mes Sorties</button>
+    </div>
+    <div class="tab-content active" id="tab-p-profil">
+      <div id="perso-header-display" style="margin-bottom:1.5rem"></div>
+      <div class="perso-grid">
+        <div class="perso-card"><div class="perso-card-title">🏅 Informations</div><div id="perso-info-block"></div></div>
+        <div class="perso-card">
+          <div class="perso-card-title">🚁 Sortie de Service</div>
+          <p style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Cochez pour enregistrer votre sortie. Date et heure horodatées automatiquement.</p>
+          <div id="perso-sortie-block"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-p-journal">
+      <div style="margin-bottom:1.5rem"><textarea id="journal-input" style="width:100%;background:var(--surface);border:1px solid var(--border2);color:var(--white);padding:1rem;font-size:.88rem;font-family:'Inter',sans-serif;resize:vertical;min-height:100px;outline:none" placeholder="Écrire une entrée de journal..."></textarea><button class="btn btn-gold" onclick="addJournalEntry()" style="margin-top:.5rem">+ Ajouter</button></div>
+      <div id="journal-list"></div>
+    </div>
+    <div class="tab-content" id="tab-p-rapports">
+      <div style="margin-bottom:1.5rem">
+        <div class="form-group"><label>Titre du rapport</label><input type="text" id="rapport-titre" placeholder="ex: Rapport de vol — Poursuite"/></div>
+        <div class="form-group"><label>Contenu</label><textarea id="rapport-contenu" style="min-height:120px" placeholder="Détaillez l'opération..."></textarea></div>
+        <button class="btn btn-gold" onclick="addRapport()">+ Soumettre le rapport</button>
+      </div>
+      <div id="rapports-list"></div>
+    </div>
+    <div class="tab-content" id="tab-p-sorties"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Historique de toutes vos sorties.</p><div id="perso-sorties-list"></div></div>
+  </div></div>
+</div>
+<div class="modal-overlay" id="modal-quiz-id">
+  <div class="modal"><div class="modal-head"><h3>📋 Identification</h3><button class="modal-close" onclick="closeModal('modal-quiz-id')">✕</button></div>
+  <div class="modal-body"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Entrez votre nom avant de commencer. Vos résultats seront transmis au Lead ASD.</p>
+    <div class="form-group"><label>Votre Nom Prénom</label><input type="text" id="quiz-nom-input" placeholder="ex: SONY DUPONT"/></div>
+    <button class="btn btn-gold" onclick="confirmQuizId()" style="width:100%">Commencer ▶</button>
+  </div></div>
+</div>
+
+<script>
+// ===== DATA LAYER =====
+const DB = {
+  get(k, d){ try{const v=localStorage.getItem('asd_'+k);return v?JSON.parse(v):d}catch(e){return d} },
+  set(k, v){ try{localStorage.setItem('asd_'+k,JSON.stringify(v))}catch(e){} }
+};
+const getAgents=()=>DB.get('agents',[]);
+const setAgents=a=>DB.set('agents',a);
+const getQcm=()=>DB.get('qcm',defaultQcm());
+const setQcm=q=>DB.set('qcm',q);
+const getResults=()=>DB.get('results',[]);
+const setResults=r=>DB.set('results',r);
+const getAdminPwd=()=>DB.get('adminpwd','ASD2024');
+const setAdminPwd=p=>DB.set('adminpwd',p);
+
+function defaultQcm(){return[
+  {q:"Quel est l'identifiant radio de l'hélicoptère primaire ASD ?",opts:["ASD-1","ASD-2","SASD-1","HELI-1"],correct:0},
+  {q:"Que signifie le code 10-04 en radio ?",opts:["Demande de renforts","Message bien reçu / Oui","Non / Impossible","En route"],correct:1},
+  {q:"Quelle est la note minimale requise pour l'Évaluation Tactique ?",opts:["14/20","15/20","16/20","12/20"],correct:1},
+  {q:"Où doit être posé l'hélicoptère après chaque service ?",opts:["LSIA","Fort Zancudo","Sandy Shores","Maze Bank Arena"],correct:2},
+  {q:"Quelle action est FORMELLEMENT INTERDITE depuis un aéronef ASD ?",opts:["Communiquer par radio","Ouvrir le feu","Filmer la zone","Guider les unités sol"],correct:1},
+  {q:"Que signifie 'MAYDAY' en code radio ?",opts:["Fin de service","Stationnaire sur zone","Situation de détresse","Demande d'identification"],correct:2},
+  {q:"Dans quel délai doit être déposé le rapport d'engagement aérien ?",opts:["24 heures","48 heures","72 heures","1 semaine"],correct:1},
+  {q:"Quel canal radio est EXCLUSIVEMENT réservé aux prises d'otage d'agent ?",opts:["CH-1","CH-2","CH-3","CH-4"],correct:1},
+  {q:"Que doit faire le pilote avant tout décollage ?",opts:["Prévenir le dispatch uniquement","Vérifier l'autorisation du Lead ou Co-Lead ASD","Contacter le gouverneur","Remplir un rapport préventif"],correct:1},
+  {q:"Quelle lettre correspond à 'Whiskey' dans l'alphabet phonétique NATO ?",opts:["V","W","X","U"],correct:1},
+];}
+
+// ===== NAV SCROLL =====
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>20);
+  const ids=['programme','procedures','radio','evaluation','reglement','questionnaire'];
+  let cur='';
+  ids.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-80)cur=id;});
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+});
+
+// ===== REVEAL =====
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ===== TOAST =====
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  const d=document.createElement('div');
+  d.className='toast-msg '+type;d.textContent=msg;t.appendChild(d);
+  setTimeout(()=>d.remove(),3500);
+}
+
+// ===== MODALS =====
+const openModal=id=>document.getElementById(id).classList.add('open');
+const closeModal=id=>document.getElementById(id).classList.remove('open');
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+
+// ===== ADMIN TABS =====
+function adminTab(id){
+  document.querySelectorAll('#modal-admin .tab').forEach((t,i)=>{
+    const contents=document.querySelectorAll('#modal-admin .tab-content');
+    t.classList.toggle('active',contents[i]&&contents[i].id===id);
+  });
+  document.querySelectorAll('#modal-admin .tab-content').forEach(c=>c.classList.toggle('active',c.id===id));
+  if(id==='tab-agents')renderAgentsTable();
+  if(id==='tab-sorties')renderSortiesAdmin();
+  if(id==='tab-qcm-results')renderQcmResults();
+  if(id==='tab-qcm-editor')renderQcmEditor();
+}
+
+// ===== PERSO TABS =====
+function persoTab(id){
+  document.querySelectorAll('#modal-perso .tab').forEach((t,i)=>{
+    const contents=document.querySelectorAll('#modal-perso .tab-content');
+    t.classList.toggle('active',contents[i]&&contents[i].id===id);
+  });
+  document.querySelectorAll('#modal-perso .tab-content').forEach(c=>c.classList.toggle('active',c.id===id));
+  if(id==='tab-p-journal')renderJournal();
+  if(id==='tab-p-rapports')renderRapports();
+  if(id==='tab-p-sorties')renderPersoSorties();
+}
+
+// ===== ADMIN AUTH =====
+function openAdminModal(){document.getElementById('admin-pwd').value='';openModal('modal-admin-auth');}
+function verifyAdmin(){
+  if(document.getElementById('admin-pwd').value===getAdminPwd()){
+    closeModal('modal-admin-auth');openModal('modal-admin');renderAgentsTable();
+  }else toast('Code incorrect.','err');
+}
+function changePwd(){
+  const p1=document.getElementById('new-pwd').value,p2=document.getElementById('new-pwd2').value;
+  if(!p1)return toast('Entrez un code.','err');
+  if(p1!==p2)return toast('Les codes ne correspondent pas.','err');
+  setAdminPwd(p1);toast('Code admin mis à jour.','ok');
+  document.getElementById('new-pwd').value='';document.getElementById('new-pwd2').value='';
+}
+function clearAllData(){
+  if(!confirm('Réinitialiser TOUTES les données ?'))return;
+  ['agents','qcm','results','adminpwd'].forEach(k=>localStorage.removeItem('asd_'+k));
+  toast('Données réinitialisées.','ok');renderAgentsTable();
+}
+
+// ===== AGENTS TABLE =====
+function gradeKey(g){return g.replace(/\s/g,'');}
+function renderAgentsTable(){
+  const q=(document.getElementById('agent-search')||{value:''}).value.toLowerCase();
+  const agents=getAgents().filter(a=>a.nom.toLowerCase().includes(q));
+  const w=document.getElementById('agents-table-wrap');
+  if(!agents.length){w.innerHTML='<p style="color:var(--muted);font-size:.85rem">Aucun agent enregistré.</p>';return;}
+  w.innerHTML=`<table class="admin-table"><thead><tr><th>Nom</th><th>Grade</th><th>Sorties</th><th>Rapports</th><th>Dernier QCM</th><th>Actions</th></tr></thead><tbody>${agents.map(a=>{
+    const sorties=(a.sorties||[]).filter(s=>s.checked).length;
+    const rapports=(a.rapports||[]).length;
+    const res=getResults().filter(r=>r.nom===a.nom);
+    const last=res.length?res[res.length-1]:null;
+    const gk=gradeKey(a.grade);
+    return `<tr><td>${a.nom}</td><td><span class="badge grade-${gk}">${a.grade}</span></td><td>${sorties?`<span class="badge badge-green">${sorties}</span>`:'<span style="color:var(--muted)">—</span>'}</td><td>${rapports?`<span class="badge badge-blue">${rapports}</span>`:'<span style="color:var(--muted)">—</span>'}</td><td>${last?`<span class="badge ${last.score>=last.total*.7?'badge-green':'badge-red'}">${last.score}/${last.total}</span>`:'<span style="color:var(--muted)">—</span>'}</td><td><button class="btn btn-outline" style="padding:.3rem .7rem;font-size:.7rem" onclick="openEditAgent('${a.nom}')">Modifier</button> <button class="btn btn-danger" style="padding:.3rem .7rem;font-size:.7rem" onclick="deleteAgent('${a.nom}')">Suppr.</button></td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+function renderSortiesAdmin(){
+  const all=[];
+  getAgents().forEach(a=>(a.sorties||[]).forEach(s=>{if(s.checked)all.push({...s,agent:a.nom,grade:a.grade});}));
+  all.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const w=document.getElementById('sorties-table-wrap');
+  if(!all.length){w.innerHTML='<p style="color:var(--muted);font-size:.85rem">Aucune sortie enregistrée.</p>';return;}
+  w.innerHTML=`<table class="admin-table"><thead><tr><th>Agent</th><th>Grade</th><th>Date & Heure</th><th>Note</th></tr></thead><tbody>${all.map(s=>`<tr><td>${s.agent}</td><td>${s.grade}</td><td style="font-family:'Share Tech Mono',monospace;color:var(--gold-dim)">${s.date}</td><td>${s.note||'—'}</td></tr>`).join('')}</tbody></table>`;
+}
+function renderQcmResults(){
+  const res=[...getResults()].reverse();
+  const w=document.getElementById('qcm-results-wrap');
+  if(!res.length){w.innerHTML='<p style="color:var(--muted);font-size:.85rem">Aucun résultat soumis.</p>';return;}
+  w.innerHTML=`<table class="admin-table"><thead><tr><th>Candidat</th><th>Score</th><th>Date</th></tr></thead><tbody>${res.map(r=>`<tr><td>${r.nom}</td><td><span class="badge ${r.score>=r.total*.7?'badge-green':'badge-red'}">${r.score}/${r.total}</span></td><td style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted)">${r.date}</td></tr>`).join('')}</tbody></table>`;
+}
+
+// ===== CREATE/EDIT/DELETE AGENT =====
+function openCreateAgentModal(){openModal('modal-create-agent');}
+function createAgent(){
+  const nom=document.getElementById('new-nom').value.trim().toUpperCase();
+  const grade=document.getElementById('new-grade').value;
+  const pwd=document.getElementById('new-agent-pwd').value;
+  if(!nom)return toast('Entrez un nom.','err');
+  if(!pwd)return toast('Entrez un code.','err');
+  const agents=getAgents();
+  if(agents.find(a=>a.nom===nom))return toast('Cet agent existe déjà.','err');
+  agents.push({nom,grade,pwd,journal:[],rapports:[],sorties:[],dateCreation:now()});
+  setAgents(agents);toast('Agent '+nom+' créé.','ok');closeModal('modal-create-agent');renderAgentsTable();
+}
+function openEditAgent(nom){
+  const a=getAgents().find(x=>x.nom===nom);if(!a)return;
+  document.getElementById('edit-agent-nom-orig').value=a.nom;
+  document.getElementById('edit-agent-nom').value=a.nom;
+  document.getElementById('edit-agent-grade').value=a.grade;
+  document.getElementById('edit-agent-pwd').value='';
+  openModal('modal-edit-agent');
+}
+function saveEditAgent(){
+  const orig=document.getElementById('edit-agent-nom-orig').value;
+  const nom=document.getElementById('edit-agent-nom').value.trim().toUpperCase();
+  const grade=document.getElementById('edit-agent-grade').value;
+  const pwd=document.getElementById('edit-agent-pwd').value;
+  const agents=getAgents();const i=agents.findIndex(a=>a.nom===orig);if(i<0)return;
+  agents[i].nom=nom;agents[i].grade=grade;if(pwd)agents[i].pwd=pwd;
+  setAgents(agents);toast('Agent mis à jour.','ok');closeModal('modal-edit-agent');renderAgentsTable();
+}
+function deleteAgent(nom){
+  if(!confirm('Supprimer l\'agent '+nom+' ?'))return;
+  setAgents(getAgents().filter(a=>a.nom!==nom));toast('Agent supprimé.','ok');renderAgentsTable();
+}
+
+// ===== QCM EDITOR =====
+let editingQcm=[];
+function renderQcmEditor(){editingQcm=JSON.parse(JSON.stringify(getQcm()));redrawQcmEditor();}
+function redrawQcmEditor(){
+  const w=document.getElementById('qcm-editor-wrap');
+  w.innerHTML=editingQcm.map((item,qi)=>`
+    <div class="qcm-editor-item">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.7rem">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:.65rem;color:var(--gold)">Q${qi+1}</span>
+        <button class="btn btn-danger" style="padding:.2rem .6rem;font-size:.7rem" onclick="removeQcmQ(${qi})">Supprimer</button>
+      </div>
+      <div class="form-group" style="margin-bottom:.7rem"><label>Question</label><textarea oninput="editingQcm[${qi}].q=this.value">${item.q}</textarea></div>
+      <label style="font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:.5rem">Options</label>
+      ${item.opts.map((opt,oi)=>`<div class="option-row"><input type="text" value="${opt}" oninput="editingQcm[${qi}].opts[${oi}]=this.value"/><button class="option-correct-btn ${item.correct===oi?'is-correct':''}" onclick="setCorrect(${qi},${oi})">${item.correct===oi?'✔ CORRECT':'Correct'}</button><button style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0 .3rem" onclick="removeQcmOpt(${qi},${oi})">✕</button></div>`).join('')}
+      <button class="btn btn-outline" style="padding:.3rem .8rem;font-size:.72rem;margin-top:.5rem" onclick="addQcmOpt(${qi})">+ Option</button>
+    </div>`).join('');
+}
+function setCorrect(qi,oi){editingQcm[qi].correct=oi;redrawQcmEditor();}
+function addQcmQuestion(){editingQcm.push({q:'Nouvelle question',opts:['Option A','Option B'],correct:0});redrawQcmEditor();}
+function removeQcmQ(qi){editingQcm.splice(qi,1);redrawQcmEditor();}
+function addQcmOpt(qi){editingQcm[qi].opts.push('Nouvelle option');redrawQcmEditor();}
+function removeQcmOpt(qi,oi){if(editingQcm[qi].opts.length<=2)return toast('Minimum 2 options.','err');editingQcm[qi].opts.splice(oi,1);if(editingQcm[qi].correct>=editingQcm[qi].opts.length)editingQcm[qi].correct=0;redrawQcmEditor();}
+function saveQcm(){setQcm(editingQcm);toast('QCM sauvegardé.','ok');}
+
+// ===== QUIZ =====
+let quizNom='',quizAnswers=[],quizSubmitted=false;
+function startQuiz(){document.getElementById('quiz-nom-input').value='';openModal('modal-quiz-id');}
+function confirmQuizId(){
+  const n=document.getElementById('quiz-nom-input').value.trim();
+  if(!n)return toast('Entrez votre nom.','err');
+  quizNom=n.toUpperCase();closeModal('modal-quiz-id');renderQuiz();
+}
+function renderQuiz(){
+  const qcm=getQcm();quizAnswers=new Array(qcm.length).fill(null);quizSubmitted=false;
+  document.getElementById('quiz-landing').style.display='none';
+  const c=document.getElementById('quiz-container');c.style.display='block';
+  c.innerHTML=`<div style="margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
+    <span style="font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--muted)">Candidat : <strong style="color:var(--white)">${quizNom}</strong></span>
+    <div style="display:flex;align-items:center;gap:1rem;flex:1;max-width:300px"><div style="flex:1;height:4px;background:var(--border)"><div id="qpfill" style="height:4px;background:var(--gold);transition:width .3s;width:0%"></div></div><span id="qplabel" style="font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted)">0/${qcm.length}</span></div>
+  </div>
+  ${qcm.map((item,qi)=>`<div class="qcm-question"><div class="qcm-q-num">QUESTION ${qi+1} / ${qcm.length}</div><div class="qcm-q-text">${item.q}</div><div class="qcm-options" id="opts-${qi}">${item.opts.map((opt,oi)=>`<label class="qcm-option" id="opt-${qi}-${oi}" onclick="selectAnswer(${qi},${oi})">${opt}</label>`).join('')}</div></div>`).join('')}
+  <div style="text-align:center;margin-top:2rem"><button class="btn btn-gold" onclick="submitQuiz()" style="padding:1rem 3rem;font-size:1rem">Soumettre ▶</button></div>
+  <div id="quiz-result"></div>`;
+}
+function selectAnswer(qi,oi){
+  if(quizSubmitted)return;
+  quizAnswers[qi]=oi;
+  document.querySelectorAll('#opts-'+qi+' .qcm-option').forEach((el,i)=>el.classList.toggle('selected',i===oi));
+  const answered=quizAnswers.filter(a=>a!==null).length,total=getQcm().length;
+  document.getElementById('qpfill').style.width=(answered/total*100)+'%';
+  document.getElementById('qplabel').textContent=answered+'/'+total;
+}
+function submitQuiz(){
+  const qcm=getQcm();
+  const un=quizAnswers.filter(a=>a===null).length;
+  if(un>0&&!confirm('Vous avez '+un+' question(s) sans réponse. Soumettre quand même ?'))return;
+  quizSubmitted=true;let score=0;
+  qcm.forEach((item,qi)=>{
+    const ans=quizAnswers[qi],ok=ans===item.correct;if(ok)score++;
+    item.opts.forEach((_,oi)=>{const el=document.getElementById('opt-'+qi+'-'+oi);if(!el)return;el.style.pointerEvents='none';if(oi===item.correct)el.classList.add('correct');else if(oi===ans&&!ok)el.classList.add('wrong');});
+  });
+  const res=getResults();res.push({nom:quizNom,score,total:qcm.length,date:now()});setResults(res);
+  const pct=Math.round(score/qcm.length*100),passed=score>=Math.ceil(qcm.length*.7);
+  document.getElementById('quiz-result').innerHTML=`<div style="text-align:center;padding:3rem;border:1px solid var(--border2);background:var(--panel);margin-top:2rem"><div style="font-family:'Rajdhani',sans-serif;font-weight:700;font-size:3rem;color:var(--gold)">${score}/${qcm.length}</div><div style="font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.2em;color:var(--muted)">SCORE OBTENU — ${pct}%</div><div style="margin-top:1rem;font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:${passed?'#7FDBA2':'#D4887F'}">${passed?'✔ RÉSULTAT SATISFAISANT':'✘ RÉSULTAT INSUFFISANT'}</div><p style="color:var(--muted);font-size:.84rem;margin-top:.5rem">${passed?'Vos résultats ont été transmis au Lead ASD.':'Révisez les modules et retentez après 48h.'}</p><button class="btn btn-outline" onclick="resetQuiz()" style="margin-top:1.5rem">↺ Recommencer</button></div>`;
+  document.getElementById('quiz-result').scrollIntoView({behavior:'smooth'});
+}
+function resetQuiz(){document.getElementById('quiz-landing').style.display='block';document.getElementById('quiz-container').style.display='none';document.getElementById('quiz-container').innerHTML='';}
+
+// ===== ESPACE PERSO =====
+let currentAgent=null;
+function openPersoModal(){document.getElementById('perso-nom').value='';document.getElementById('perso-pwd').value='';openModal('modal-perso-auth');}
+function loginPerso(){
+  const nom=document.getElementById('perso-nom').value.trim().toUpperCase();
+  const pwd=document.getElementById('perso-pwd').value;
+  const a=getAgents().find(a=>a.nom===nom&&a.pwd===pwd);
+  if(!a)return toast('Identifiant ou code incorrect.','err');
+  currentAgent=a;closeModal('modal-perso-auth');loadPerso();openModal('modal-perso');
+}
+function logoutPerso(){currentAgent=null;closeModal('modal-perso');}
+function fresh(){return currentAgent?getAgents().find(a=>a.nom===currentAgent.nom):null;}
+function saveA(updated){const agents=getAgents();const i=agents.findIndex(a=>a.nom===updated.nom);if(i>=0)agents[i]=updated;setAgents(agents);currentAgent=updated;}
+
+function loadPerso(){
+  const a=fresh();if(!a)return;
+  document.getElementById('perso-modal-title').textContent='Mon Espace — '+a.nom;
+  const gk=gradeKey(a.grade);
+  document.getElementById('perso-header-display').innerHTML=`<div><div class="perso-name">${a.nom}</div><div class="perso-grade-badge grade-${gk}">${a.grade}</div></div>`;
+  document.getElementById('perso-info-block').innerHTML=`<div style="display:flex;flex-direction:column;gap:.8rem;font-size:.88rem">
+    <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:.6rem"><span style="color:var(--muted)">Nom complet</span><span>${a.nom}</span></div>
+    <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:.6rem"><span style="color:var(--muted)">Grade</span><span class="badge grade-${gk}">${a.grade}</span></div>
+    <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:.6rem"><span style="color:var(--muted)">Sorties</span><span style="color:var(--gold)">${(a.sorties||[]).filter(s=>s.checked).length}</span></div>
+    <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Intégration</span><span style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--muted)">${a.dateCreation||'—'}</span></div>
+  </div>`;
+  renderSortieBlock();renderJournal();renderRapports();renderPersoSorties();
+}
+
+function renderSortieBlock(){
+  const a=fresh();if(!a)return;
+  const today=new Date().toLocaleDateString('fr-FR');
+  const ex=(a.sorties||[]).find(s=>s.date&&s.date.startsWith(today));
+  document.getElementById('perso-sortie-block').innerHTML=`
+    <div class="sortie-row">
+      <input type="checkbox" class="sortie-check" id="stodaychk" ${ex&&ex.checked?'checked':''} onchange="toggleSortie(this)"/>
+      <span class="sortie-time" id="stoday-time">${ex&&ex.checked?ex.date:'—'}</span>
+      <label for="stodaychk" style="color:var(--white);font-family:'Share Tech Mono',monospace;font-size:.75rem;cursor:pointer">Sortie du jour</label>
+    </div>
+    <p style="font-size:.75rem;color:var(--muted);margin-top:.7rem;font-family:'Share Tech Mono',monospace">La case enregistre automatiquement date et heure.</p>`;
+}
+function toggleSortie(cb){
+  const a=fresh();if(!a)return;
+  if(!a.sorties)a.sorties=[];
+  const dt=now(),today=new Date().toLocaleDateString('fr-FR');
+  const idx=a.sorties.findIndex(s=>s.date&&s.date.startsWith(today));
+  if(cb.checked){
+    if(idx>=0){a.sorties[idx].checked=true;a.sorties[idx].date=dt;}
+    else a.sorties.push({date:dt,checked:true,note:''});
+    document.getElementById('stoday-time').textContent=dt;toast('Sortie enregistrée : '+dt,'ok');
+  }else{
+    if(idx>=0)a.sorties[idx].checked=false;
+    document.getElementById('stoday-time').textContent='—';toast('Sortie annulée.','');
+  }
+  saveA(a);
+}
+function renderPersoSorties(){
+  const a=fresh();if(!a)return;
+  const s=[...(a.sorties||[]).filter(x=>x.checked)].reverse();
+  const el=document.getElementById('perso-sorties-list');
+  if(!s.length){el.innerHTML='<p style="color:var(--muted);font-size:.85rem">Aucune sortie enregistrée.</p>';return;}
+  el.innerHTML=s.map((x,i)=>`<div class="sortie-row"><span style="color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:.7rem;min-width:20px">#${s.length-i}</span><span class="sortie-time">${x.date}</span><span class="sortie-note">${x.note||'Service standard'}</span></div>`).join('');
+}
+
+function addJournalEntry(){
+  const txt=document.getElementById('journal-input').value.trim();if(!txt)return toast('Entrez un texte.','err');
+  const a=fresh();if(!a)return;if(!a.journal)a.journal=[];
+  a.journal.unshift({text:txt,date:now(),id:Date.now()});saveA(a);
+  document.getElementById('journal-input').value='';renderJournal();toast('Entrée ajoutée.','ok');
+}
+function renderJournal(){
+  const a=fresh();if(!a)return;const el=document.getElementById('journal-list');
+  const e=a.journal||[];
+  if(!e.length){el.innerHTML='<p style="color:var(--muted);font-size:.85rem">Aucune entrée.</p>';return;}
+  el.innerHTML=e.map(x=>`<div class="journal-entry"><div class="journal-meta">📅 ${x.date}</div><div class="journal-text">${x.text.replace(/\n/g,'<br>')}</div><button class="journal-btn del" onclick="delJournal(${x.id})">Supprimer</button></div>`).join('');
+}
+function delJournal(id){const a=fresh();if(!a)return;a.journal=(a.journal||[]).filter(e=>e.id!==id);saveA(a);renderJournal();}
+
+function addRapport(){
+  const titre=document.getElementById('rapport-titre').value.trim();
+  const contenu=document.getElementById('rapport-contenu').value.trim();
+  if(!titre||!contenu)return toast('Titre et contenu requis.','err');
+  const a=fresh();if(!a)return;if(!a.rapports)a.rapports=[];
+  a.rapports.unshift({titre,contenu,date:now(),id:Date.now()});saveA(a);
+  document.getElementById('rapport-titre').value='';document.getElementById('rapport-contenu').value='';
+  renderRapports();toast('Rapport soumis.','ok');
+}
+function renderRapports(){
+  const a=fresh();if(!a)return;const el=document.getElementById('rapports-list');
+  const r=a.rapports||[];
+  if(!r.length){el.innerHTML='<p style="color:var(--muted);font-size:.85rem">Aucun rapport.</p>';return;}
+  el.innerHTML=r.map(x=>`<div class="report-entry"><div class="report-meta">📄 ${x.titre} — ${x.date}</div><div style="font-size:.84rem;color:var(--muted);line-height:1.7;margin-top:.4rem">${x.contenu.replace(/\n/g,'<br>')}</div><button class="journal-btn del" onclick="delRapport(${x.id})">Supprimer</button></div>`).join('');
+}
+function delRapport(id){const a=fresh();if(!a)return;a.rapports=(a.rapports||[]).filter(r=>r.id!==id);saveA(a);renderRapports();}
+
+function now(){return new Date().toLocaleString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+</script>
+</body>
+</html>
