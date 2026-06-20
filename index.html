@@ -423,6 +423,7 @@
   <div class="modal-body"><p style="color:var(--muted);font-size:.85rem;margin-bottom:1.5rem">Accès réservé au Lead ASD. Entrez le code d'accès.</p>
   <div class="form-group"><label>Code d'accès Admin</label><input type="password" id="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')verifyAdmin()"/></div>
   <button class="btn btn-gold" onclick="verifyAdmin()" style="width:100%">Connexion</button>
+  <p style="color:var(--muted);font-size:.72rem;margin-top:1rem;font-family:'Share Tech Mono',monospace">Code par défaut : <span style="color:var(--gold)">ASD2024</span></p></div></div>
 </div>
 <div class="modal-overlay" id="modal-admin">
   <div class="modal modal-wide"><div class="modal-head"><h3>⚙ Panel Administrateur — ASD</h3><button class="modal-close" onclick="closeModal('modal-admin')">✕</button></div>
@@ -525,9 +526,19 @@
 
 <script>
 // ===== DATA LAYER =====
+const _mem = {};
 const DB = {
-  get(k, d){ try{const v=localStorage.getItem('asd_'+k);return v?JSON.parse(v):d}catch(e){return d} },
-  set(k, v){ try{localStorage.setItem('asd_'+k,JSON.stringify(v))}catch(e){} }
+  get(k, d){
+    try{
+      const v=localStorage.getItem('asd_'+k);
+      if(v!=null){_mem[k]=JSON.parse(v);return _mem[k];}
+    }catch(e){}
+    return k in _mem ? _mem[k] : d;
+  },
+  set(k, v){
+    _mem[k]=v;
+    try{localStorage.setItem('asd_'+k,JSON.stringify(v));}catch(e){}
+  }
 };
 const getAgents=()=>DB.get('agents',[]);
 const setAgents=a=>DB.set('agents',a);
@@ -562,7 +573,10 @@ window.addEventListener('scroll',()=>{
 
 // ===== REVEAL =====
 const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+});
 
 // ===== TOAST =====
 function toast(msg,type=''){
@@ -575,7 +589,6 @@ function toast(msg,type=''){
 // ===== MODALS =====
 const openModal=id=>document.getElementById(id).classList.add('open');
 const closeModal=id=>document.getElementById(id).classList.remove('open');
-document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
 
 // ===== ADMIN TABS =====
 function adminTab(id){
